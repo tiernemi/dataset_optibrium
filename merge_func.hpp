@@ -11,11 +11,9 @@ enum MERGE_MODES {
 
 template <typename keyType1, typename... dataTypes1, typename keyType2, 
 		 typename... dataTypes2, typename newKeyType, typename... newDataTypes>
-
 bool mergeDatasets(const Dataset<keyType1,dataTypes1...> & dataset1, 
 	const Dataset<keyType2,dataTypes2...> & dataset2, Dataset<newKeyType,newDataTypes...> & newDat,
 	int mode = MERGE_D1_PREF) {
-
 
 	newDat.clear() ;
 	// Get overlapping fields. //
@@ -98,6 +96,20 @@ bool mergeDatasets(const Dataset<keyType1,dataTypes1...> & dataset1,
 		}
 	} 
 }
+
+template <typename keyType1, typename... dataTypes1, typename keyType2, 
+		 typename... dataTypes2, typename newKeyType, typename... newDataTypes>
+void getIntersection(const Dataset<keyType1,dataTypes1...> & dataset1,
+	const Dataset<keyType2,dataTypes2...> & dataset2, Dataset<newKeyType,newDataTypes...> & newDat) {
+	newDat.clear() ;
+
+	for (int i = 0 ; i < dataset1.getNumRows() ; ++i) {
+		auto key = dataset1.getKey(i) ;
+		if (dataset2.searchDataset(key)) {
+		}
+	}
+}
+
 
 
 #endif /* end of include guard: MERGE_FUNC_HPP_A870DWHM */

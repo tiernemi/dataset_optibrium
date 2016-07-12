@@ -43,12 +43,14 @@ class Dataset {
 	Dataset(const std::vector<std::string> & fields, int key) ;
 	bool insert(const storedType & input) ;
 	template <typename setType>
-	bool setMemberByIndex(const std::string & field, int rowNum, const setType & var) ;
+	bool setFieldByIndex(const std::string & field, int rowNum, const setType & var) ;
+	const keyType & getKey(int index) ;
 	storedType & getDataByIndex(int index) ;
 	storedType & getDataByKey(keyType key) ;
 	const storedType & getDataByIndex(int index) const ;
 	const storedType & getDataByKey(keyType key) const ;
 	void printData(std::ostream & output) ;
+	bool searchDataset(keyType key) ;
 	const std::unordered_map<std::string,int> & getFields() const { return fields ; } ;
 	int getNumMembers() const { return map.size() ; } ;
 	int getNumFields() const { return fields.size() ; } ;
@@ -75,7 +77,7 @@ Dataset<keyType,dataTypes...>::Dataset(const std::vector<std::string> & fields, 
 
 template <typename keyType, typename... dataTypes>
 template <typename setType>
-bool Dataset<keyType,dataTypes...>::setMemberByIndex(const std::string & field, int rowNum, const setType & var) {
+bool Dataset<keyType,dataTypes...>::setFieldByIndex(const std::string & field, int rowNum, const setType & var) {
 	typename decltype(fields)::iterator iter ;
 	if ((iter = fields.find((field))) != fields.end()) {
 		int colIndex = (*iter).second ;
@@ -99,6 +101,23 @@ bool Dataset<keyType,dataTypes...>::setMemberByIndex(const std::string & field, 
 	} else {
 		return false ;
 	}
+}
+
+
+template <typename keyType, typename... dataTypes>
+bool Dataset<keyType,dataTypes...>::searchDataset(keyType key) {
+	if (map.find(key) != map.end()) {
+		return true ;
+	} else {
+		return false ;
+	}
+}
+
+template <typename keyType, typename... dataTypes>
+const keyType & Dataset<keyType,dataTypes...>::getKey(int index) {
+	auto iter = map.begin() ;
+	std::advance(iter,index) ;
+	return (*iter).first ;
 }
 
 template <typename keyType, typename... dataTypes>
